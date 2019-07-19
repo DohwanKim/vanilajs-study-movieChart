@@ -20,6 +20,15 @@ npm run serve
 * 0.0.1
     * Working On
 
+#### 사용 Lib
+* ajax
+* bootstrap
+* lite-server (PackageManager : Yarn)
+
+#### 사용 Tool
+* VisualCode
+* Chrome
+
 <!-- Markdown link & img dfn's -->
 [npm-image]: https://img.shields.io/npm/v/datadog-metrics.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/datadog-metrics
