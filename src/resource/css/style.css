@@ -1,0 +1,86 @@
+html{
+  margin: 0;
+  padding: 0;
+  width:100%;
+}
+.header{
+  margin: 150px auto 30px auto;
+}
+.search{
+  padding: 0;
+}
+form {
+  position: relative;
+  padding: 0;
+  margin: 0 5vw;
+  margin-bottom: 15px;
+}
+input[type=text] {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 14px;
+  line-height: 1.5;
+  border: 1px solid #cccccc;
+}
+.btn-reset,
+.btn-remove {
+  border-radius: 50%;
+  background-color: #ccc;
+  color: white;
+  border: none;
+  padding: 1px 2px;
+  height:15px;
+  width: 15px;
+  font-size: 2px;
+}
+.btn-reset {
+  position: absolute;
+  top: 14px;
+  right: 20px;
+}
+.btn-reset::before,
+.btn-remove::before {
+  content: 'X'
+}
+.m-box{
+  border: 1px solid gray;
+  margin: 0 5vw;
+  height: 30vw;
+}
+.m-img{
+  background-color: black;
+  height: 20vw;
+  width: 1vw;
+  border: 1 solid blue;
+  margin: 10 auto;
+}
+.m-memo{
+  background-color: blue;
+  height:100%;
+}
+.title{
+  width:100%;
+  max-height:20vw;
+  font-size:4vw;
+  text-align:center;
+  vertical-align: middle;
+  padding-top:3vw;
+}
+.subtitle{
+  width:100%;
+  max-height:10vw;
+  font-size:1vw;
+  text-align:center;
+  color:gray;
+}
+.descript{
+  width:100%;
+  font-size:3vw;
+  text-align:center;
+  max-height:70vw;
+  /* overflow-wrap: normal; */
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+}
