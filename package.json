@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "lite-server -c etc/server_config.json"
+    "dev": "lite-server -c etc/server_config.json",
+    "server": "java -jar ./etc/REST_API/movieAPI.jar"
   },
   "repository": {
     "type": "git",
