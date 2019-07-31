@@ -12,7 +12,7 @@ MVC 패턴을 사용한 JavaScript 구성된 프로젝트이며 먼저 만든 Mo
 
 ```sh
 npm install
-npm run serve
+npm run dev
 ```
 
 ## 업데이트 내역
