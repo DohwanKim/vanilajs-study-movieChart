@@ -66,6 +66,8 @@ CI(UT) => IT => AT => PT
 
 #####(o) 1.install jest-puppeteer
 #####(o) 2.Unit Test, Acceptance Test
+
+2019/08/02 (금)
 #####()  3.검색기록 at_fail -> code -> at_success -> ut -> git
 #####()  4.인기랭킹 at_fail -> code -> at_success -> ut -> git 
 

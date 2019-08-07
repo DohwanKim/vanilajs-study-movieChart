@@ -20,7 +20,7 @@ InputFormView.bindEvnet = function(){
 
 InputFormView.inputKeyUp = function(evt){
     if(evt.keyCode == KEY_ENTER){
-        this.emit('@search', this.inputEl.value)
+        this.searchMovie()
     }
     this.showBtn(!!this.inputEl.value)
 }
@@ -29,4 +29,10 @@ InputFormView.showBtn = function(isShow = true){
     this.resetBtnEl.style.display = isShow == true?'':'none'
     this.emit('@input', {isShow : isShow})
 }
+
+InputFormView.searchMovie = function(title=this.inputEl.value){
+    this.inputEl.value = title
+    this.emit('@search', this.inputEl.value)
+}
+
 export default InputFormView

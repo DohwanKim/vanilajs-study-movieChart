@@ -12,11 +12,10 @@ const request = (context)=>{ //(url, method, data)
 export default {
     async searchMovie(query){
         var title = query.split(' ').join('@')
-
         const apiToken = await getToken
         var url = `http://localhost:8080/api/find/${title}/${apiToken}`
         var method = "get"
-        console.log(title)
+        
         return request({url, method})
     },
     async getRank(){

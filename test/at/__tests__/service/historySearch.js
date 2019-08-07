@@ -1,75 +1,62 @@
-// ###> 검색 기록 (local 일시적 저장)
-// #####( ) 검색 기록, 목록이 탭 아래에 위치한다.
-// - 탭아래에 위치에 있는지 확인
-// #####( ) 검색기록이 없다면 ('기록이없어요' 표시)
-// - 검색 기록이 없다면 기록이 없어요 표시가 되는지
-// #####( ) 검색일자, 검색어, x버튼 표시
-// - 검색일자, 검색어, x표시 엘리멘트가 보이는가?
-// #####( ) 목록에서 검색어메뉴를 클릭하면 선택된 검색어로 검색결과 표시
-// - 검색어를 클릭하면 (전부) 검색결과가 표시되는지
-// #####( ) 검색시 검색 기록 목록에 추가 될 것
-// - 검색을하면 검색기록에 추가되는지
-// - 검색기록을 클릭해도 검색기록이 추가되는지
-
 describe('HistorySearch Test', () => {
     let page
-    let baseUrl = 'http://localhost:3003/'
+    let baseUrl = 'http://localhost:3001'
+    async function wait(ms){
+      return new Promise((resolve)=>{
+        setTimeout(()=>{resolve()}, ms*1000)
+      })
+    }
     beforeAll(async () => {
       page = await global.__BROWSER__.newPage()
     })
 
-    afterAll(async () => {
-      await page.close()
-    })
-
     beforeEach(async() => {
+      page = await global.__BROWSER__.newPage()
       await page.goto(baseUrl)
+
+      await page.waitForSelector('#tabs')
+      await page.waitForSelector('#search-history')
+      await page.click('#tabs > li:nth-child(2)')
     })
 
     it('탭아래 위치에 있는지 확인', async () => {
-      await page.waitForSelector('#tabs', {visible: true})
-      await page.waitForSelector('#search-history', {visible: true})
-
-      const getYPos = (selector)=>{
-        var posTop = $(selector).position()
-        var height = $(selector).outerHeight(true)
-        return posTop + height
-      }
 
       var tabs_y = await page.evaluate(async()=>{
-        return getYPos('#tabs')
+        var posTop = $('#tabs').position().top
+        var height = $('#tabs').outerHeight(true)
+        return posTop + height
       })
 
       var history_y = await page.evaluate(async()=>{
-        return getYPos('#search-history')
+        var posTop = $('#search-history').position().top
+        var height = $('#search-history').outerHeight(true)
+        return posTop + height
       })
-
-      expect(!!tabs_y>=history_y).toBe(true)
+      console.log(tabs_y, history_y)
+      expect(!!!(tabs_y>=history_y)).toBe(true)
     })
 
-    it('검색 기록이 없다면 기록이 없어요 표시가 되는지', async () => {
-      var expectText = '검색 기록이 없어요.'
-      let text = await page.evaluate(() => document.querySelector('#textMsg').textContent)
-      expect(text).toBe(expectText)
-    })
+    // it('검색 기록이 없다면 기록이 없어요 표시가 되는지', async () => {
+    //   var expectText = '검색 기록이 없어요.'
+    //   let text = await page.evaluate(() => document.querySelector('#textMsg').textContent)
+    //   expect(text).toBe(expectText)
+    // })
 
     it('검색일자, 검색어, x표시 엘리멘트가 보이는가?', async () => {
-      var selectors = ['#history_date', '#history_query', '#history_delete_btn']
+      var selectors = ['.date', '.history_query', '.btn-remove']
       await page.waitForSelector(selectors[0], {visible: true})
-
-      Array.from(selectors).forEach(async(selector)=>{
-      })
+      await page.waitForSelector(selectors[1], {visible: true})
+      await page.waitForSelector(selectors[2], {visible: true})
     })
 
     it('검색어를 클릭하면 (전부) 검색결과가 표시되는지', async () => {
-      await page.waitForSelector('li', {visible: true})
+      await page.waitForSelector('#search-history > ul > li', {visible: true})
       var title = await page.evaluate(async()=>{
-        var t = document.querySelector('#search-history>li').children[0].textContent
+        var t = document.querySelectorAll('#search-history > ul > li')[0].getAttribute('data-title')
         return t
       })
 
-      await page.click('#search-history>li')
-
+      await page.click('#search-history > ul > li')
       var inputTitle = await page.evaluate(async()=>{
         var t = document.querySelector('input').value
         return t
@@ -78,22 +65,29 @@ describe('HistorySearch Test', () => {
       expect(inputTitle).toContain(title)
     })
     
-    it('검색탭을 클릭하면 결과가 표시되는지', async () => {
-      var searchText = "test"
-      await page.click('#search-history>li')
-      await page.waitForSelector('search-result', {visible : true})
-
+    it('히스토리 탭의 키워드를 클릭하면 결과가 표시되는지', async () => {
+      await page.waitForSelector('#search-history>ul>li', {visible: true})
+      await page.click('#search-history>ul>li')
+      await page.waitForSelector('#search-result', {visible : true})
     })
 
     it('검색을하면 검색기록에 추가되는지', async () => {
       var searchText = "shark"
-      var len = await page.evaluate(() => document.querySelectorAll('#search-history>li').length)
+      var len = await page.evaluate(() => document.querySelectorAll('#search-history>ul>li').length)
       await page.waitForSelector('input')
       await page.type('input', searchText)
+      await page.focus('input')
       await page.keyboard.down('Enter')
-      await page.goto(baseUrl)
-      var resLen = await page.evaluate(() => document.querySelectorAll('#search-history>li').length)
-      var resText = await page.evaluate(() => document.querySelectorAll('#search-history>li').pop()[0].value)
+      await page.keyboard.press('Enter')
+      await wait(3)
+      
+      await page.click('body>div.container>form>button')
+      await page.waitForSelector('#tabs')
+      await page.waitForSelector('#search-history')
+      await page.click('#tabs > li:nth-child(2)')
+
+      var resLen = await page.evaluate(() => document.querySelectorAll('#search-history>ul>li').length)
+      var resText = await page.evaluate((resLen) => document.querySelectorAll('#search-history>ul>li')[resLen-1].getAttribute('data-title'), resLen)
       
       expect(resLen).toBe(len+1)
       expect(resText).toBe(searchText)
